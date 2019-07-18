@@ -1,6 +1,11 @@
 const db = require('../../data/dbConfig');
 
-module.exports = { getRecipes, getShoppingList, getInstructions };
+module.exports = {
+  getRecipes,
+  getShoppingList,
+  getInstructions,
+  getRecipesForIngredient,
+};
 
 function getRecipes() {
   return db('recipes');
@@ -18,4 +23,11 @@ function getInstructions(recipe_id) {
     .select('instruction', 'instruction_step')
     .where({ recipe_id })
     .orderBy('instruction_step');
+}
+
+function getRecipesForIngredient(ingredient_id) {
+  return db('recipeDetails')
+    .select('recipe_name')
+    .innerJoin('recipes', 'recipe_id', 'recipes.id')
+    .where({ ingredient_id });
 }
